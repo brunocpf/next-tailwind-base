@@ -1,10 +1,10 @@
 import Page from 'components/Page';
-import HomeScene from 'scenes/HomeScene';
+import BarScene from 'scenes/BarScene';
 
 export default function HomePage() {
   return (
-    <Page title="Bares">
-      <HomeScene />
+    <Page title="Bar">
+      <BarScene />
     </Page>
   );
 }
