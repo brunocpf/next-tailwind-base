@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import useBars from 'api/useBars';
 import useCurrentPosition from 'util/useCurrentPosition';
 
-export interface HomeSceneProps {}
+export interface HomeSceneProps { }
 
 function scrollPositionIsTop(value: number) {
   return value <= 0;
@@ -22,7 +22,7 @@ const HomeScene: React.FC<HomeSceneProps> = () => {
   const [filtered, setFiltered] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const currentPosition = useCurrentPosition();
-  const { data } = useBars(currentPosition, 5000);
+  // const { data } = useBars(currentPosition, 5000);
 
   console.log('home screen');
 
@@ -55,9 +55,8 @@ const HomeScene: React.FC<HomeSceneProps> = () => {
                 className="relative rounded-full iconButton highlightCurrent text-violet-500 active:text-violet-300 transition-all"
               >
                 <OutlineFilterIcon
-                  className={`transition-all ring-current iconShadow ${
-                    top ? 'h-8 w-8' : 'h-6 w-6'
-                  }`}
+                  className={`transition-all ring-current iconShadow ${top ? 'h-8 w-8' : 'h-6 w-6'
+                    }`}
                 />
                 <motion.div
                   animate={{ opacity: filtered ? 1 : 0 }}
@@ -68,17 +67,15 @@ const HomeScene: React.FC<HomeSceneProps> = () => {
                   className="absolute inset-0"
                 >
                   <SolidFilterIcon
-                    className={`transition-all ring-current iconShadow ${
-                      top ? 'h-8 w-8' : 'h-6 w-6'
-                    }`}
+                    className={`transition-all ring-current iconShadow ${top ? 'h-8 w-8' : 'h-6 w-6'
+                      }`}
                   />
                 </motion.div>
               </button>
               <button className="relative rounded-full iconButton highlightCurrent text-violet-500 active:text-violet-300 transition-all">
                 <OutlineLocationMarkerIcon
-                  className={`transition-all ring-current iconShadow ${
-                    top ? 'h-8 w-8' : 'h-6 w-6'
-                  }`}
+                  className={`transition-all ring-current iconShadow ${top ? 'h-8 w-8' : 'h-6 w-6'
+                    }`}
                 />
               </button>
             </div>

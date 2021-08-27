@@ -1,30 +1,27 @@
 import { Dialog, Transition } from '@headlessui/react';
 import {
-  ChevronLeftIcon,
-  StarIcon as OutlineStarIcon,
-  LocationMarkerIcon as OutlineLocationMarkerIcon,
+  CheckIcon, ChevronDownIcon, ChevronLeftIcon, LocationMarkerIcon as OutlineLocationMarkerIcon, StarIcon as OutlineStarIcon
 } from '@heroicons/react/outline';
 import {
-  StarIcon as SolidStarIcon,
-  LocationMarkerIcon as SolidLocationMarkerIcon,
-  PhoneIcon,
-  GlobeIcon,
+  GlobeIcon, LocationMarkerIcon as SolidLocationMarkerIcon,
+  PhoneIcon, StarIcon as SolidStarIcon
 } from '@heroicons/react/solid';
 import Container from 'components/Container';
 import PhotoGallery from 'components/PhotoGallery';
-import { useRouter } from 'next/router';
-import { Fragment } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+import { Fragment, useState } from 'react';
 import formatDistance from 'util/formatDistance';
 
-export interface BarSceneProps {}
+export interface BarSceneProps { }
 
 const BarScene: React.FC<BarSceneProps> = () => {
   const { back, query } = useRouter();
+  const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false);
 
   const { barId } = query;
 
-  const { name, favorite, summary, address, distance, phone, website } = {
+  const { name, favorite, summary, address, distance, phone, website, keywords } = {
     name: 'Correria Music Bar',
     favorite: false,
     summary:
@@ -34,12 +31,47 @@ const BarScene: React.FC<BarSceneProps> = () => {
     distance: 8000,
     phone: '(27) 98116-3325',
     website: 'http://www.facebook.com/correriamusicbar',
+    keywords: [
+      'Mesas externas',
+      'Refeição no local',
+      'Espaço seguro para pessoas transgênero',
+      'Jogos de bar',
+      'Mesas na cobertura',
+      'Música ao vivo',
+      'Noite de trivia',
+      'Ótimos coquetéis',
+      'Ótimos petiscos',
+      'Shows ao vivo',
+      'Assento com acessibilidade',
+      'Banheiro com acessibilidade',
+      'Entrada com acessibilidade',
+      'Estacionamento com acessibilidade',
+      'Alimentação',
+      'Bebidas alcoólicas',
+      'Bebidas destiladas',
+      'Bebidas para happy hour',
+      'Cerveja',
+      'Coquetéis',
+      'Dança',
+      'Vinho',
+      'Opções de refeição',
+      'Lugar para sentar',
+      'Banheiro',
+      'Banheiro de gênero neutro',
+      'Wi-Fi gratuito',
+      'Aconchegante',
+      'Casual',
+      'Público',
+      'Grupos',
+      'Cartões de débito',
+      'Cartões de crédito',
+    ]
   };
 
   const handleCloseDialog = () => {
     back();
   };
-  const handleToggleFavorite = () => {};
+  const handleToggleFavorite = () => { };
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -70,7 +102,7 @@ const BarScene: React.FC<BarSceneProps> = () => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="w-screen h-screen overflow-hidden text-left align-middle transition-all transform bg-gray-800">
+            <div className="w-screen h-screen overflow-y-scroll overflow-x-hidden text-left align-middle transition-all transform bg-gray-800">
               <div className="py-4">
                 <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
                   <Container>
@@ -155,6 +187,28 @@ const BarScene: React.FC<BarSceneProps> = () => {
                         >
                           {website}
                         </a>
+                      </div>
+                    </section>
+                    <section>
+                      {/* Horários */}
+                    </section>
+                    <section>
+                      {/* Eventos */}
+                    </section>
+                    <section className="py-2">
+                      <div className="border-solid border-gray-600 border-2 rounded p-1">
+                        <button className="flex gap-1 py- w-full" onClick={() => setAdditionalInfoExpanded(s => !s)}>
+                          <ChevronDownIcon className={`h-6 w-6 ${additionalInfoExpanded ? '' : 'rotate-180'} transform transition-transform`} />
+                          <span>Informações adicionais</span>
+                        </button>
+                        <div className={`grid grid-cols-2 gap-4 md:grid-cols-3 text-sm ${additionalInfoExpanded ? 'block' : 'hidden'} overflow-hidden transition-all py-2`} >
+                          {keywords.map(k =>
+                            <span key={k} className="text-sm flex gap-1">
+                              <CheckIcon className="h-4 w-4" />
+                              {k}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </section>
                     <section></section>
