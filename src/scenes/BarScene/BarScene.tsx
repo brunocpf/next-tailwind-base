@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import {
-  CheckIcon, ChevronDownIcon, ChevronLeftIcon, LocationMarkerIcon as OutlineLocationMarkerIcon, StarIcon as OutlineStarIcon
+  CheckIcon, ChevronDownIcon, ChevronLeftIcon, LocationMarkerIcon as OutlineLocationMarkerIcon, ShareIcon, StarIcon as OutlineStarIcon
 } from '@heroicons/react/outline';
 import {
   GlobeIcon, LocationMarkerIcon as SolidLocationMarkerIcon,
@@ -16,7 +16,7 @@ import formatDistance from 'util/formatDistance';
 export interface BarSceneProps { }
 
 const BarScene: React.FC<BarSceneProps> = () => {
-  const { back, query } = useRouter();
+  const { back, query, push } = useRouter();
   const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false);
 
   const { barId } = query;
@@ -70,8 +70,16 @@ const BarScene: React.FC<BarSceneProps> = () => {
 
   const handleCloseDialog = () => {
     back();
+    push('/');
   };
   const handleToggleFavorite = () => { };
+
+  const handleExpandInfo = () => setAdditionalInfoExpanded(s => !s);
+  const handleShare = () => window.navigator.share({
+    text: name,
+    title: `Bar: ${name}`,
+    url: window.location.href,
+  })
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -189,19 +197,19 @@ const BarScene: React.FC<BarSceneProps> = () => {
                         </a>
                       </div>
                     </section>
-                    <section>
+                    <section className="py-2">
                       {/* Horários */}
                     </section>
-                    <section>
+                    <section className="py-2">
                       {/* Eventos */}
                     </section>
                     <section className="py-2">
-                      <div className="border-solid border-gray-600 border-2 rounded p-1">
-                        <button className="flex gap-1 py- w-full" onClick={() => setAdditionalInfoExpanded(s => !s)}>
+                      <div className="border-solid border-gray-700 border-2 rounded p-1">
+                        <button className="flex gap-1 py-1 w-full" onClick={handleExpandInfo}>
                           <ChevronDownIcon className={`h-6 w-6 ${additionalInfoExpanded ? '' : 'rotate-180'} transform transition-transform`} />
                           <span>Informações adicionais</span>
                         </button>
-                        <div className={`grid grid-cols-2 gap-4 md:grid-cols-3 text-sm ${additionalInfoExpanded ? 'block' : 'hidden'} overflow-hidden transition-all py-2`} >
+                        <div className={`grid gap-4 grid-cols-2 md:grid-cols-3 text-sm ${additionalInfoExpanded ? 'block' : 'hidden'} overflow-hidden transition-all py-2`} >
                           {keywords.map(k =>
                             <span key={k} className="text-sm flex gap-1">
                               <CheckIcon className="h-4 w-4" />
@@ -211,7 +219,12 @@ const BarScene: React.FC<BarSceneProps> = () => {
                         </div>
                       </div>
                     </section>
-                    <section></section>
+                    <section className="py-2">
+                      <button className="flex gap-1" onClick={handleShare}>
+                        <ShareIcon className="h-6 w-6" />
+                        <span>Compartilhar</span>
+                      </button>
+                    </section>
                   </Container>
                 </div>
               </div>
