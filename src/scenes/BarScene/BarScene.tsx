@@ -1,10 +1,17 @@
 import { Dialog, Transition } from '@headlessui/react';
 import {
-  CheckIcon, ChevronDownIcon, ChevronLeftIcon, LocationMarkerIcon as OutlineLocationMarkerIcon, ShareIcon, StarIcon as OutlineStarIcon
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  LocationMarkerIcon as OutlineLocationMarkerIcon,
+  ShareIcon,
+  StarIcon as OutlineStarIcon,
 } from '@heroicons/react/outline';
 import {
-  GlobeIcon, LocationMarkerIcon as SolidLocationMarkerIcon,
-  PhoneIcon, StarIcon as SolidStarIcon
+  GlobeIcon,
+  LocationMarkerIcon as SolidLocationMarkerIcon,
+  PhoneIcon,
+  StarIcon as SolidStarIcon,
 } from '@heroicons/react/solid';
 import Container from 'components/Container';
 import PhotoGallery from 'components/PhotoGallery';
@@ -12,16 +19,29 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
 import formatDistance from 'util/formatDistance';
+import rotateArray from 'util/rotateArray';
 
-export interface BarSceneProps { }
+export interface BarSceneProps {}
 
 const BarScene: React.FC<BarSceneProps> = () => {
   const { back, query, push } = useRouter();
+  const [timesExpanded, setTimesExpanded] = useState(true);
   const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false);
 
   const { barId } = query;
 
-  const { name, favorite, summary, address, distance, phone, website, keywords } = {
+  const {
+    name,
+    favorite,
+    summary,
+    address,
+    distance,
+    phone,
+    website,
+    keywords,
+    openNow,
+    weekdayText,
+  } = {
     name: 'Correria Music Bar',
     favorite: false,
     summary:
@@ -65,21 +85,36 @@ const BarScene: React.FC<BarSceneProps> = () => {
       'Grupos',
       'Cartões de débito',
       'Cartões de crédito',
-    ]
+    ],
+    openNow: true,
+    weekdayText: [
+      'Domingo: Fechado',
+      'Segunda-feira: 9:00 AM – 5:00 PM',
+      'Terça-feira: 9:00 AM – 5:00 PM',
+      'Quarta-feira: 9:00 AM – 5:00 PM',
+      'Quinta-feira: 9:00 AM – 5:00 PM',
+      'Sexta-feira: 9:00 AM – 5:00 PM',
+      'Sábado: Fechado',
+    ],
   };
 
   const handleCloseDialog = () => {
     back();
     push('/');
   };
-  const handleToggleFavorite = () => { };
 
+  const handleToggleFavorite = () => {};
+
+  const rotatedWeekdayText = rotateArray(weekdayText, new Date().getDay());
+
+  const handleExpandTimes = () => setTimesExpanded(s => !s);
   const handleExpandInfo = () => setAdditionalInfoExpanded(s => !s);
-  const handleShare = () => window.navigator.share({
-    text: name,
-    title: `Bar: ${name}`,
-    url: window.location.href,
-  })
+  const handleShare = () =>
+    window.navigator.share({
+      text: name,
+      title: `Bar: ${name}`,
+      url: window.location.href,
+    });
 
   return (
     <Transition appear show={true} as={Fragment}>
@@ -198,24 +233,70 @@ const BarScene: React.FC<BarSceneProps> = () => {
                       </div>
                     </section>
                     <section className="py-2">
-                      {/* Horários */}
+                      <div className="border-solid border-gray-700 border-2 rounded p-1">
+                        <button
+                          className="flex gap-1 py-1 w-full"
+                          onClick={handleExpandTimes}
+                        >
+                          <ChevronDownIcon
+                            className={`h-6 w-6 ${
+                              timesExpanded ? '' : 'rotate-180'
+                            } transform transition-transform`}
+                          />
+                          <span>Horários</span>
+                        </button>
+                        <div
+                          className={`text-sm px-2 ${
+                            timesExpanded ? 'block' : 'hidden'
+                          } overflow-hidden transition-all py-2`}
+                        >
+                          <div>
+                            <span
+                              className={`${
+                                openNow ? 'text-green-400' : 'text-red-400'
+                              }`}
+                            >
+                              {openNow ? 'Aberto Agora' : 'Fechado'}
+                            </span>
+                          </div>
+                          <div>
+                            {rotatedWeekdayText.map((r, i) => (
+                              <div
+                                className={`${i === 0 ? 'font-bold' : ''}`}
+                                key={i}
+                              >
+                                {r}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </section>
-                    <section className="py-2">
-                      {/* Eventos */}
-                    </section>
+                    <section className="py-2">{/* Eventos */}</section>
                     <section className="py-2">
                       <div className="border-solid border-gray-700 border-2 rounded p-1">
-                        <button className="flex gap-1 py-1 w-full" onClick={handleExpandInfo}>
-                          <ChevronDownIcon className={`h-6 w-6 ${additionalInfoExpanded ? '' : 'rotate-180'} transform transition-transform`} />
+                        <button
+                          className="flex gap-1 py-1 w-full"
+                          onClick={handleExpandInfo}
+                        >
+                          <ChevronDownIcon
+                            className={`h-6 w-6 ${
+                              additionalInfoExpanded ? '' : 'rotate-180'
+                            } transform transition-transform`}
+                          />
                           <span>Informações adicionais</span>
                         </button>
-                        <div className={`grid gap-4 grid-cols-2 md:grid-cols-3 text-sm ${additionalInfoExpanded ? 'block' : 'hidden'} overflow-hidden transition-all py-2`} >
-                          {keywords.map(k =>
+                        <div
+                          className={`grid gap-4 grid-cols-2 md:grid-cols-3 text-sm ${
+                            additionalInfoExpanded ? 'block' : 'hidden'
+                          } overflow-hidden transition-all py-2`}
+                        >
+                          {keywords.map(k => (
                             <span key={k} className="text-sm flex gap-1">
                               <CheckIcon className="h-4 w-4" />
                               {k}
                             </span>
-                          )}
+                          ))}
                         </div>
                       </div>
                     </section>
