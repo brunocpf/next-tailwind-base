@@ -1,11 +1,12 @@
 import List from 'components/List';
+import { useFavorites } from 'features/favorites';
 import { useState } from 'react';
 import BarThumbnail from './BarThumbnail';
 
 export interface BarListProps {}
 
 type Bar = {
-  id: number;
+  id: string;
   thumbnailImg: string;
   name: string;
   distance: number;
@@ -19,7 +20,7 @@ type Bar = {
 
 const dummyBars: Bar[] = [
   {
-    id: 0,
+    id: '0',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -30,7 +31,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 1,
+    id: '1',
     thumbnailImg: '/thumbnails/thumbnail_2.png',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -38,7 +39,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 2,
+    id: '2',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -49,7 +50,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 3,
+    id: '3',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -60,7 +61,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 4,
+    id: '4',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -71,7 +72,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 5,
+    id: '5',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -82,7 +83,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 6,
+    id: '6',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -93,7 +94,7 @@ const dummyBars: Bar[] = [
     address: 'Belo Horizonte, Cachoeirinha',
   },
   {
-    id: 7,
+    id: '7',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -105,7 +106,7 @@ const dummyBars: Bar[] = [
     favorite: false,
   },
   {
-    id: 8,
+    id: '8',
     thumbnailImg: '/thumbnails/thumb_correria.jpg',
     name: 'Correria Music Bar',
     distance: 8200,
@@ -119,15 +120,11 @@ const dummyBars: Bar[] = [
 ];
 
 const BarList: React.FC<BarListProps> = () => {
-  const [bars, setBars] = useState([...dummyBars]);
+  const [bars] = useState([...dummyBars]);
+  const { favorites, toggleFavorite } = useFavorites();
 
-  const handleClickFavorite = (id: number) => {
-    const newBars = bars.map(b => ({
-      ...b,
-      favorite: b.id == id ? !b.favorite : b.favorite,
-    }));
-
-    setBars(newBars);
+  const handleClickFavorite = (id: string) => {
+    toggleFavorite(id);
   };
 
   return (
@@ -141,7 +138,7 @@ const BarList: React.FC<BarListProps> = () => {
           name={b.name}
           openHours={b.openHours}
           address={b.address}
-          favorite={b.favorite}
+          favorite={favorites.includes(b.id)}
           onClickFavorite={() => handleClickFavorite(b.id)}
         />
       ))}

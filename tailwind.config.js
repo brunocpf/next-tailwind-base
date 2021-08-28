@@ -21,7 +21,7 @@ module.exports = {
       backgroundColor: ['active'],
       backgroundOpacity: ['active'],
       borderWidth: ['hover'],
-      ring: ['hover', 'focus'],
+      ring: ['hover', 'focus', 'active'],
       textColor: ['active'],
     },
   },

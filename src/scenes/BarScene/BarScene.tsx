@@ -13,8 +13,10 @@ import {
   PhoneIcon,
   StarIcon as SolidStarIcon,
 } from '@heroicons/react/solid';
+import Accordion from 'components/Accordion';
 import Container from 'components/Container';
 import PhotoGallery from 'components/PhotoGallery';
+import { useFavorites } from 'features/favorites';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
@@ -27,12 +29,13 @@ const BarScene: React.FC<BarSceneProps> = () => {
   const { back, query, push } = useRouter();
   const [timesExpanded, setTimesExpanded] = useState(true);
   const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false);
+  const { favorites, toggleFavorite } = useFavorites();
 
   const { barId } = query;
 
   const {
+    id,
     name,
-    favorite,
     summary,
     address,
     distance,
@@ -42,8 +45,8 @@ const BarScene: React.FC<BarSceneProps> = () => {
     openNow,
     weekdayText,
   } = {
+    id: '5',
     name: 'Correria Music Bar',
-    favorite: false,
     summary:
       "Espaço boêmio oferece noites com bandas de heavy metal, rock 'n' roll e blues, além de caipirinhas e sinuca.",
     address:
@@ -98,12 +101,16 @@ const BarScene: React.FC<BarSceneProps> = () => {
     ],
   };
 
+  const favorite = favorites.includes(id);
+
   const handleCloseDialog = () => {
     back();
     push('/');
   };
 
-  const handleToggleFavorite = () => {};
+  const handleToggleFavorite = () => {
+    toggleFavorite(id);
+  };
 
   const rotatedWeekdayText = rotateArray(weekdayText, new Date().getDay());
 
@@ -233,73 +240,53 @@ const BarScene: React.FC<BarSceneProps> = () => {
                       </div>
                     </section>
                     <section className="py-2">
-                      <div className="border-solid border-gray-700 border-2 rounded p-1">
-                        <button
-                          className="flex gap-1 py-1 w-full"
-                          onClick={handleExpandTimes}
+                      <section className="py-2">
+                        <Accordion
+                          title="Horários"
+                          onClickExpand={handleExpandTimes}
+                          expanded={timesExpanded}
                         >
-                          <ChevronDownIcon
-                            className={`h-6 w-6 ${
-                              timesExpanded ? '' : 'rotate-180'
-                            } transform transition-transform`}
-                          />
-                          <span>Horários</span>
-                        </button>
-                        <div
-                          className={`text-sm px-2 ${
-                            timesExpanded ? 'block' : 'hidden'
-                          } overflow-hidden transition-all py-2`}
-                        >
-                          <div>
-                            <span
-                              className={`${
-                                openNow ? 'text-green-400' : 'text-red-400'
-                              }`}
-                            >
-                              {openNow ? 'Aberto Agora' : 'Fechado'}
-                            </span>
-                          </div>
-                          <div>
-                            {rotatedWeekdayText.map((r, i) => (
-                              <div
-                                className={`${i === 0 ? 'font-bold' : ''}`}
-                                key={i}
+                          <div className="text-sm px-2">
+                            <div className="pb-2">
+                              <span
+                                className={`${
+                                  openNow ? 'text-green-400' : 'text-red-400'
+                                }`}
                               >
-                                {r}
-                              </div>
+                                {openNow ? 'Aberto Agora' : 'Fechado'}
+                              </span>
+                            </div>
+                            <div>
+                              {rotatedWeekdayText.map((r, i) => (
+                                <div
+                                  className={`${i === 0 ? 'font-bold' : ''}`}
+                                  key={i}
+                                >
+                                  {r}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </Accordion>
+                      </section>
+                      <section className="py-2">
+                        <Accordion
+                          title="Informações adicionais"
+                          expanded={additionalInfoExpanded}
+                          onClickExpand={handleExpandInfo}
+                        >
+                          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 text-sm">
+                            {keywords.map(k => (
+                              <span key={k} className="text-sm flex gap-1">
+                                <CheckIcon className="h-4 w-4" />
+                                {k}
+                              </span>
                             ))}
                           </div>
-                        </div>
-                      </div>
+                        </Accordion>
+                      </section>
                     </section>
-                    <section className="py-2">{/* Eventos */}</section>
-                    <section className="py-2">
-                      <div className="border-solid border-gray-700 border-2 rounded p-1">
-                        <button
-                          className="flex gap-1 py-1 w-full"
-                          onClick={handleExpandInfo}
-                        >
-                          <ChevronDownIcon
-                            className={`h-6 w-6 ${
-                              additionalInfoExpanded ? '' : 'rotate-180'
-                            } transform transition-transform`}
-                          />
-                          <span>Informações adicionais</span>
-                        </button>
-                        <div
-                          className={`grid gap-4 grid-cols-2 md:grid-cols-3 text-sm ${
-                            additionalInfoExpanded ? 'block' : 'hidden'
-                          } overflow-hidden transition-all py-2`}
-                        >
-                          {keywords.map(k => (
-                            <span key={k} className="text-sm flex gap-1">
-                              <CheckIcon className="h-4 w-4" />
-                              {k}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </section>
+                    {/* <section className="py-2">Eventos</section> */}
                     <section className="py-2">
                       <button className="flex gap-1" onClick={handleShare}>
                         <ShareIcon className="h-6 w-6" />
