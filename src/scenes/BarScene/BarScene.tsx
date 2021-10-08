@@ -1,7 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import {
   CheckIcon,
-  ChevronDownIcon,
   ChevronLeftIcon,
   LocationMarkerIcon as OutlineLocationMarkerIcon,
   ShareIcon,
@@ -26,12 +25,12 @@ import rotateArray from 'util/rotateArray';
 export interface BarSceneProps {}
 
 const BarScene: React.FC<BarSceneProps> = () => {
-  const { back, query, push } = useRouter();
+  const { back, /*query,*/ push } = useRouter();
   const [timesExpanded, setTimesExpanded] = useState(true);
   const [additionalInfoExpanded, setAdditionalInfoExpanded] = useState(false);
   const { favorites, toggleFavorite } = useFavorites();
 
-  const { barId } = query;
+  // const { barId } = query;
 
   const {
     id,

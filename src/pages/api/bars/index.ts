@@ -1,16 +1,16 @@
 import {
   Client,
-  Language,
+  // Language,
   LatLng,
-  PlaceInputType,
+  // PlaceInputType,
 } from '@googlemaps/google-maps-services-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-type GetBarsQuery = {
-  searchTerms: string[];
-};
+// type GetBarsQuery = {
+//   searchTerms: string[];
+// };
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,9 +18,9 @@ export default async function handler(
 ) {
   const location = JSON.parse(req.query.location.toString()) as LatLng;
   const radius = JSON.parse(req.query.radius.toString()) as number;
-  const searchTerms = JSON.parse(
-    req.query.searchTerms?.toString() ?? '[]',
-  ) as string[];
+  // const searchTerms = JSON.parse(
+  //   req.query.searchTerms?.toString() ?? '[]',
+  // ) as string[];
   const client = new Client({});
 
   const result = await client.placesNearby({
