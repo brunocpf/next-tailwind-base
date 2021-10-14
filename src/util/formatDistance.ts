@@ -1,14 +1,16 @@
-const kmFormatter = new Intl.NumberFormat('pt-BR', {
-  style: 'unit',
-  unit: 'kilometer',
-  unitDisplay: 'narrow',
-});
+const kmFormatter = { format: (n: number) => `${n} km` };
+// new Intl.NumberFormat('pt-BR', {
+//   style: 'unit',
+//   unit: 'kilometer',
+//   unitDisplay: 'narrow',
+// });
 
-const mFormatter = new Intl.NumberFormat('pt-BR', {
-  style: 'unit',
-  unit: 'meter',
-  unitDisplay: 'narrow',
-});
+const mFormatter = { format: (n: number) => `$${n} km` };
+// new Intl.NumberFormat('pt-BR', {
+//   style: 'unit',
+//   unit: 'meter',
+//   unitDisplay: 'narrow',
+// });
 
 const formatDistance = (valueInM: number) => {
   if (valueInM < 999.5) {
